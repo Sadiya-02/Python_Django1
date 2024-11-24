@@ -1,0 +1,67 @@
+{% extends 'store/layouts/main.html' %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1>{{ category_name.name }}</h1>
+            <hr>
+            <div class="row">
+                {% for item in products %}
+                <div class="col-md-3 mb-4">  <!-- Added mb-4 for margin-bottom -->
+                    <div class="card h-100">  <!-- Added h-100 to make cards equal height -->
+                        <a href="{% url 'store:productview' item.category.slug item.slug %}">
+                            <div class="card-body">
+                                <div class="category-image">
+                                    <img src="{{ item.product_image.url }}" alt="Product image" class="card-img-top">  <!-- Use card-img-top for styling -->
+                                </div>
+                                <h4 class="text-center">{{ item.name }}</h4>
+                                <div class="mt-auto">
+                                    <div class="d-flex justify-content">
+                                        <span class="float-start"> Original Price:<strong> {{ item.orginal_price | stringformat:'d' }}</strong></span>
+                                        <span class="float-end"> Selling Price:<strong> {{ item.selling_price | stringformat:'d' }}</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .category-image {
+    height: 310px; 
+    overflow: hidden; 
+}
+
+.category-image img {
+    width: 100%; 
+    height: auto; 
+    object-fit: cover; 
+}
+
+.card {
+    border: 1px solid #ddd; 
+    border-radius: 8px;
+    transition: transform 0.2s; 
+}
+
+.card:hover {
+    transform: scale(1.05); 
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; 
+}
+
+.text-center {
+    margin: 10px 0; 
+}
+
+</style>
+{% endblock %}

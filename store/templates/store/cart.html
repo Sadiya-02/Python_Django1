@@ -1,0 +1,66 @@
+{% extends 'store/layouts/main.html' %}
+{% block content %}
+
+<div class="py-3 bg-primary">
+    <div class="container">
+        <a class="text-white" href="{% url 'store:home' %}"> Home / </a>
+        <a class="text-white" href="{% url 'store:cart' %}"> Cart </a>
+    </div>
+</div>
+
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow">
+                    <div class="card-body cartdata">
+                        {% if cart %}
+                            <div class="row">
+                                <div class="col-md-12">
+                                    {% for item in cart %}
+                                        <div class="row product_data align-items-center mb-3">
+                                            <div class="col-md-2 text-center">
+                                                <img src="{{ item.product.product_image.url }}" height="70px" width="70px" alt="Image here" class="img-fluid">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6 class="mb-0">{{ item.product.name }}</h6>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6 class="mb-0">Rs {{ item.product.selling_price }}</h6>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="hidden" class="prod_id" value="{{ item.product.id }}">
+                                                {% csrf_token %}
+                                                {% if item.product.quantity >= item.product_qty %}
+                                                    <div class="input-group">
+                                                        <button class="input-group-text update-cart-btn decrement-btn">-</button>
+                                                        <input type="number" name="quantity" class="form-control qty-input text-center" value="{{ item.product_qty }}" min="1" max="{{ item.product.quantity }}">
+                                                        <button class="input-group-text update-cart-btn increment-btn">+</button>
+                                                    </div>
+                                                {% else %}
+                                                    <h6 class="mb-0">Out Of Stock</h6>
+                                                {% endif %}
+                                            </div>
+                                            <div class="col-md-1 text-center">
+                                                <button class="btn btn-danger delete-cart-item">
+                                                    <i class="fa fa-trash"></i> Remove
+                                                </button>
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                    <div class="text-end">
+                                        <a href="{% url 'store:checkout' %}" class="btn btn-outline-success"> Checkout </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% else %}
+                            <h4>Your cart is empty</h4>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
